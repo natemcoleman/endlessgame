@@ -15,6 +15,10 @@ void WorldClass::update_world(const std::vector<double>& mouseCoords, const std:
 
     update_lasers();
     update_lasers(windowCoords.at(0), windowCoords.at(1), windowCoords.at(2), windowCoords.at(3));
+
+    check_lasers_and_zombies();
+
+    update_enemies();
 }
 
 void WorldClass::update_lasers()
@@ -61,9 +65,36 @@ void WorldClass::move_player(const std::vector<bool> &keysPressed)
     }
 }
 
+void WorldClass::update_enemies()
+{
+    std::vector<double> playerCoords{player.getX(), -player.getY()};
+    for(int i = 0; i < enemies.size(); i++)
+    {
+        enemies.at(i).adjustAngle(playerCoords);
+        enemies.at(i).moveCoordAlongAngle();
+    }
+}
+
+void WorldClass::check_lasers_and_zombies()
+{
+    for(int i = 0; i < enemies.size(); i++)
+    {
+        for(int j = 0; j < lasers.size(); j++)
+        {
+            if(maxKillDistance > get_distance_between_two_points(enemies.at(i).getX(), enemies.at(i).getY(), lasers.at(j).getLaserCoords().at(0), lasers.at(j).getLaserCoords().at(1)))
+            {
+                enemies.erase(enemies.begin()+i);
+                lasers.erase(lasers.begin()+j);
+                break;
+            }
+        }
+    }
+}
+
 void WorldClass::add_random_enemy()
 {
     Coords newEnemy{generate_random_double(), generate_random_double(), 0};
+    enemies.push_back(newEnemy);
 }
 
 bool WorldClass::laser_location_is_valid(int laserX1, int laserY1, int laserX2, int laserY2, int windowMaxX, int windowMaxY, int windowMinX, int windowMinY)
@@ -117,6 +148,12 @@ double WorldClass::generate_random_double()
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(minRandomNumber, maxRandomNumber);
+    std::uniform_real_distribution<> dis(minRandomDistance, maxRandomDistance);
+
     return dis(gen);
+}
+
+double WorldClass::get_distance_between_two_points(const double& firstX, const double& firstY, const double& secondX, const double& secondY)
+{
+    return (sqrt(((secondX-firstX)*(secondX-firstX))+((secondY-firstY)*(secondY-firstY))));
 }

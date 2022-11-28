@@ -15,8 +15,13 @@ public:
     void update_lasers();
     void update_lasers(int windowMaxX, int windowMaxY, int windowMinX, int windowMinY);
     void move_player(const std::vector<bool>& keysPressed);
+    void update_enemies();
+
+    void check_lasers_and_zombies();
 
     void add_random_enemy();
+
+    double get_distance_between_two_points(const double& firstX, const double& firstY, const double& secondX, const double& secondY);
 
     bool laser_location_is_valid(int laserX1, int laserY1, int laserX2, int laserY2, int windowMaxX, int windowMaxY, int windowMinX, int windowMinY);
 
@@ -35,8 +40,10 @@ public:
 
 
 protected:
-    double maxRandomNumber{100};
-    double minRandomNumber{-minRandomNumber};
+    double maxRandomDistance{400};
+    double minRandomDistance{-maxRandomDistance};
+
+    double maxKillDistance{25};
 
     double deltaAmount{5};
     Coords player{};

@@ -49,7 +49,16 @@ void MainWindow::setup_graphics_view()
 void MainWindow::move_player()
 {
     shooterWorld.move_player(scene->keysPressed);
-    output_player_coords();
+}
+
+void MainWindow::add_enemies()
+{
+    std:: << "enemyCounter:" << enemyAddCounter << std::endl;
+    if(enemyAddCounter > 1000)
+    {
+        enemyAddCounter = 0;
+        shooterWorld.add_random_enemy();
+    }
 }
 
 void MainWindow::draw_lasers()
@@ -62,51 +71,12 @@ void MainWindow::draw_lasers()
 
 void MainWindow::draw_enemies()
 {
+    ui->numEnemies->display(static_cast<int>(shooterWorld.getEnemies().size()));
+
     for(int i = 0; i < shooterWorld.getEnemies().size(); i++)
     {
         ellipse = scene->addEllipse(shooterWorld.getEnemies().at(i).getX()-(playerEllipseSize/2), shooterWorld.getEnemies().at(i).getY()-(playerEllipseSize/2), playerEllipseSize, playerEllipseSize,QPen(Qt::red),QBrush(Qt::green));
     }
-}
-
-bool MainWindow::eventFilter(QObject * obj, QEvent * ev)
-{
-//    if (obj == ui->graphicsView)
-//        if (ev->type() == QEvent::MouseMove)
-//        {
-//            QMouseEvent *mEvent = (QMouseEvent*)ev;
-////            mouseCoords.at(0) = mEvent->pos().x() - (ui->graphicsView->size().width()/2);
-////            mouseCoords.at(1) = mEvent->pos().y()- (ui->graphicsView->size().height()/2);
-//        }
-//    if(ev->type() == QEvent::KeyPress)
-//    {
-//        std::cout << "key pressed" << std::endl;
-//    }
-//    if(ev->type() == QEvent::KeyRelease)
-//    {
-//        std::cout << "key released" << std::endl;
-//    }
-    return false;
-}
-void MainWindow::mouseMoveEvent(QMouseEvent * ev)
-{
-//    mouseCoords.at(0) = ev->pos().x() - (ui->graphicsView->size().width()/2);
-//    mouseCoords.at(1) = ev->pos().y() - (ui->graphicsView->size().height()/2);
-}
-
-void MainWindow::mousePressEvent(QMouseEvent * ev)
-{
-//    mouseIsPressed = scene->mouseIsPressed;
-//    std::cout << "mouse pressed" << std::endl;
-
-
-//    Laser newLaser{shooterWorld.getPlayer().getX(), shooterWorld.getPlayer().getY(), shooterWorld.getPlayer().getAngle()};
-//    shooterWorld.lasers.push_back(newLaser);
-}
-
-void MainWindow::mouseReleaseEvent(QMouseEvent * ev)
-{
-//    mouseIsPressed = false;
-    //    std::cout << "mouse released" << std::endl;
 }
 
 void MainWindow::add_player()
@@ -153,8 +123,20 @@ void MainWindow::output_player_coords()
     std::cout << "Player X:" << shooterWorld.getPlayer().getX() << " Y:" << shooterWorld.getPlayer().getY() << std::endl;
 }
 
+void MainWindow::output_enemy_coords()
+{
+    for(int i = 0; i < shooterWorld.getEnemies().size(); i++)
+    {
+        std::cout << "Enemy" << i << " X:" << shooterWorld.getEnemies().at(i).getX() << " Y:" << shooterWorld.getEnemies().at(i).getY() << " Angle:" << shooterWorld.getEnemies().at(i).getAngle() <<std::endl;
+    }
+}
+
 void MainWindow::update_world()
 {
+    enemyAddCounter++;
+
+    add_enemies();
+
     ui->graphicsView->centerOn(0,0);
 
     scene->setSceneRect(viewRect);
@@ -170,7 +152,6 @@ void MainWindow::update_world()
     move_player();
 
     shooterWorld.update_world(mouseCoords, keyPresses, windowCoords);
-//    std::cout << "mouseX:" << mouseCoords.at(0) << " mouseY:" << mouseCoords.at(1) << std::endl;
 
     add_player();
 
@@ -178,14 +159,14 @@ void MainWindow::update_world()
 
     draw_enemies();
 
+//    output_player_coords();
+
+//    output_enemy_coords();
 }
 
 void MainWindow::on_updateWorldButton_released()
 {
-//    update_world();
-    std::cout << "num enemies" << shooterWorld.getEnemies().size() << std::endl;
     shooterWorld.add_random_enemy();
-
 }
 
 double MainWindow::generate_random_double()
