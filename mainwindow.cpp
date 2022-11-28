@@ -79,7 +79,7 @@ void MainWindow::draw_enemies()
     }
 }
 
-void MainWindow::add_player()
+void MainWindow::draw_player()
 {
     ui->playerHealth->display(shooterWorld.getPlayerHealth());
 
@@ -102,49 +102,90 @@ void MainWindow::get_mouse_location()
 //    }
 }
 
+void MainWindow::sniper_shot()
+{
+    int laserLifespan{1000};
+
+    Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle(), laserLifespan};
+    shooterWorld.lasers.push_back(newLaser);
+    scene->mouseIsPressed = false;
+}
+
+void MainWindow::shotgun_shot()
+{
+    int numShots{15};
+    int spreadAngle{50};
+    int laserLifespan{10};
+
+    for(int i = 0; i < numShots; i++)
+    {
+        Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(spreadAngle/2), laserLifespan};
+        shooterWorld.lasers.push_back(newLaser);
+    }
+    scene->mouseIsPressed = false;
+}
+
+void MainWindow::burst_shot()
+{
+    int numShots{5};
+    int laserLifespan{20};
+    int spreadAngle{10};
+
+    for(int i = 0; i < numShots; i++)
+    {
+        Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(spreadAngle/2), laserLifespan};
+        shooterWorld.lasers.push_back(newLaser);
+    }
+    scene->mouseIsPressed = false;
+}
+
+void MainWindow::minigun_shot()
+{
+    int spreadAngle{50};
+    int laserLifespan{60};
+
+    Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(spreadAngle/2), laserLifespan};
+    shooterWorld.lasers.push_back(newLaser);
+}
+
+void MainWindow::rpg_shot()
+{
+    int numShots{50};
+    int laserLifespan{10};
+
+    for(int i = 0; i < numShots; i++)
+    {
+        Laser newLaser{mouseCoords.at(0), mouseCoords.at(1), generate_random_double(180), laserLifespan};
+        shooterWorld.lasers.push_back(newLaser);
+    }
+    scene->mouseIsPressed = false;
+}
+
 void MainWindow::get_key_presses()
 {
     mouseIsPressed = scene->mouseIsPressed;
 
     if(mouseIsPressed)
     {
-        if(ui->gunSelector->currentIndex() == 0) //SNIPER
+        if(ui->gunSelector->currentIndex() == 0)
         {
-            Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle(), 1000};
-            shooterWorld.lasers.push_back(newLaser);
-            scene->mouseIsPressed = false;
+            sniper_shot();
         }
-        else if(ui->gunSelector->currentIndex() == 1) //SHOTGUN
+        else if(ui->gunSelector->currentIndex() == 1)
         {
-            for(int i = 0; i < 15; i++)
-            {
-                Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(25), 10};
-                shooterWorld.lasers.push_back(newLaser);
-            }
-            scene->mouseIsPressed = false;
+            shotgun_shot();
         }
-        else if(ui->gunSelector->currentIndex() == 2) //BURST
+        else if(ui->gunSelector->currentIndex() == 2)
         {
-            for(int i = 0; i < 5; i++)
-            {
-                Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(5), 20};
-                shooterWorld.lasers.push_back(newLaser);
-            }
-            scene->mouseIsPressed = false;
+            burst_shot();
         }
-        else if(ui->gunSelector->currentIndex() == 3) //MINIGUN
+        else if(ui->gunSelector->currentIndex() == 3)
         {
-            Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(25), 45};
-            shooterWorld.lasers.push_back(newLaser);
+            minigun_shot();
         }
-        else if(ui->gunSelector->currentIndex() == 4) //RPG
+        else if(ui->gunSelector->currentIndex() == 4)
         {
-            for(int i = 0; i < 50; i++)
-            {
-                Laser newLaser{mouseCoords.at(0), mouseCoords.at(1), generate_random_double(180), 10};
-                shooterWorld.lasers.push_back(newLaser);
-            }
-            scene->mouseIsPressed = false;
+            rpg_shot();
         }
     }
 }
@@ -197,7 +238,7 @@ void MainWindow::update_world()
 
     shooterWorld.update_world(mouseCoords, keyPresses, windowCoords);
 
-    add_player();
+    draw_player();
 
     draw_lasers();
 
