@@ -39,6 +39,12 @@ void Coords::updateCoord(std::vector<double> newCoords, double newAngle)
     angle = newAngle;
 }
 
+void Coords::moveCoordAlongAngle()
+{
+    x = x + (zombieUpdateMoveAmount*sin(angle*PI/180));
+    y = y + (zombieUpdateMoveAmount*cos(angle*PI/180));
+}
+
 void Coords::addX(const double& deltaX)
 {
     x+= deltaX;
@@ -85,4 +91,14 @@ double Coords::generate_random_double()
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(minRandomNumber, maxRandomNumber);
     return dis(gen);
+}
+
+double Coords::getZombieUpdateMoveAmount() const
+{
+    return zombieUpdateMoveAmount;
+}
+
+void Coords::setZombieUpdateMoveAmount(double newZombieUpdateMoveAmount)
+{
+    zombieUpdateMoveAmount = newZombieUpdateMoveAmount;
 }

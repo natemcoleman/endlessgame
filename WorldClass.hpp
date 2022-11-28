@@ -37,9 +37,20 @@ public:
     std::vector<Laser> lasers{};
 
     double generate_random_double();
+    double generate_random_angle();
 
+    void set_enemy_speed(int newSpeed);
+
+    int getEnemyIntelligence() const;
+    void setEnemyIntelligence(int newEnemyIntelligence);
+
+    int getNumEnemiesDefeated() const;
+    void setNumEnemiesDefeated(int newNumEnemiesDefeated);
 
 protected:
+    int numEnemiesDefeated{0};
+    int enemyIntelligence{0};
+
     double maxRandomDistance{400};
     double minRandomDistance{-maxRandomDistance};
 

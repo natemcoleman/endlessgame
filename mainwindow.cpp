@@ -53,8 +53,8 @@ void MainWindow::move_player()
 
 void MainWindow::add_enemies()
 {
-    std:: << "enemyCounter:" << enemyAddCounter << std::endl;
-    if(enemyAddCounter > 1000)
+//    std::cout << "enemyCounter:" << enemyAddCounter << std::endl;
+    if(enemyAddCounter > 100)
     {
         enemyAddCounter = 0;
         shooterWorld.add_random_enemy();
@@ -72,6 +72,7 @@ void MainWindow::draw_lasers()
 void MainWindow::draw_enemies()
 {
     ui->numEnemies->display(static_cast<int>(shooterWorld.getEnemies().size()));
+    ui->numEnemiesDefeated->display(shooterWorld.getNumEnemiesDefeated());
 
     for(int i = 0; i < shooterWorld.getEnemies().size(); i++)
     {
@@ -85,7 +86,7 @@ void MainWindow::add_player()
     line = scene->addLine(shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayerGun().getLaserCoords().at(2), shooterWorld.getPlayerGun().getLaserCoords().at(3), QPen(Qt::red));
 }
 
-void MainWindow::get_mouse_location()
+void MainWindow::get_mouse_location() //FIXME
 {
 //    QPoint mousePosition{ui->graphicsView->cursor().pos().x()- (ui->graphicsView->size().width()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).x(), ui->graphicsView->cursor().pos().x()- (ui->graphicsView->size().width()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).x()};
 
@@ -176,3 +177,10 @@ double MainWindow::generate_random_double()
     std::uniform_real_distribution<> dis(minRandomNumber, maxRandomNumber);
     return dis(gen);
 }
+
+void MainWindow::on_enemyIntelligence_sliderMoved(int position)
+{
+//    shooterWorld.setEnemyIntelligence(ui->enemyIntelligence->sliderPosition());
+    shooterWorld.set_enemy_speed(ui->enemyIntelligence->sliderPosition());
+}
+

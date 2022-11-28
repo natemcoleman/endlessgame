@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>439</width>
-    <height>312</height>
+    <width>693</width>
+    <height>518</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,9 +28,12 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
+           <widget class="QLCDNumber" name="numEnemies"/>
+          </item>
+          <item>
            <widget class="QPushButton" name="updateWorldButton">
             <property name="text">
-             <string>PushButton</string>
+             <string>Add Enemy</string>
             </property>
            </widget>
           </item>
@@ -50,6 +53,39 @@
           </item>
          </layout>
         </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLCDNumber" name="numEnemiesDefeated">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="enemyIntelligence">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>20</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
        </layout>
       </item>
       <item>
@@ -64,8 +100,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>439</width>
-     <height>17</height>
+     <width>693</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>

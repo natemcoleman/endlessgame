@@ -71,6 +71,7 @@ void WorldClass::update_enemies()
     for(int i = 0; i < enemies.size(); i++)
     {
         enemies.at(i).adjustAngle(playerCoords);
+        enemies.at(i).setAngle(enemies.at(i).getAngle()+generate_random_angle());
         enemies.at(i).moveCoordAlongAngle();
     }
 }
@@ -83,6 +84,7 @@ void WorldClass::check_lasers_and_zombies()
         {
             if(maxKillDistance > get_distance_between_two_points(enemies.at(i).getX(), enemies.at(i).getY(), lasers.at(j).getLaserCoords().at(0), lasers.at(j).getLaserCoords().at(1)))
             {
+                numEnemiesDefeated++;
                 enemies.erase(enemies.begin()+i);
                 lasers.erase(lasers.begin()+j);
                 break;
@@ -151,6 +153,43 @@ double WorldClass::generate_random_double()
     std::uniform_real_distribution<> dis(minRandomDistance, maxRandomDistance);
 
     return dis(gen);
+}
+
+double WorldClass::generate_random_angle()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(-enemyIntelligence, enemyIntelligence);
+
+    return dis(gen);
+}
+
+void WorldClass::set_enemy_speed(int newSpeed)
+{
+    for(int i = 0; i < enemies.size(); i++)
+    {
+        enemies.at(i).setZombieUpdateMoveAmount(newSpeed);
+    }
+}
+
+int WorldClass::getEnemyIntelligence() const
+{
+    return enemyIntelligence;
+}
+
+void WorldClass::setEnemyIntelligence(int newEnemyIntelligence)
+{
+    enemyIntelligence = newEnemyIntelligence;
+}
+
+int WorldClass::getNumEnemiesDefeated() const
+{
+    return numEnemiesDefeated;
+}
+
+void WorldClass::setNumEnemiesDefeated(int newNumEnemiesDefeated)
+{
+    numEnemiesDefeated = newNumEnemiesDefeated;
 }
 
 double WorldClass::get_distance_between_two_points(const double& firstX, const double& firstY, const double& secondX, const double& secondY)
