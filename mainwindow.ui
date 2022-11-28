@@ -102,10 +102,10 @@
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>20</number>
+             <number>100</number>
             </property>
             <property name="value">
-             <number>4</number>
+             <number>100</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -129,7 +129,7 @@
      <x>0</x>
      <y>0</y>
      <width>693</width>
-     <height>21</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>

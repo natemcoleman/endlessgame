@@ -53,8 +53,7 @@ void MainWindow::move_player()
 
 void MainWindow::add_enemies()
 {
-//    std::cout << "enemyCounter:" << enemyAddCounter << std::endl;
-    if(enemyAddCounter > 100)
+    if(enemyAddCounter > enemyAddThreshold)
     {
         enemyAddCounter = 0;
         shooterWorld.add_random_enemy();
@@ -90,16 +89,17 @@ void MainWindow::add_player()
     line = scene->addLine(shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayerGun().getLaserCoords().at(2), shooterWorld.getPlayerGun().getLaserCoords().at(3), QPen(Qt::red));
 }
 
-void MainWindow::get_mouse_location() //FIXME
+void MainWindow::get_mouse_location()
 {
-//    QPoint mousePosition{ui->graphicsView->cursor().pos().x()- (ui->graphicsView->size().width()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).x(), ui->graphicsView->cursor().pos().x()- (ui->graphicsView->size().width()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).x()};
+//    QPoint mousePosition{ui->graphicsView->cursor().pos().x() - (ui->graphicsView->size().width()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).x(), ui->graphicsView->cursor().pos().y() - (ui->graphicsView->size().height()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).y() + topBuffer};
 
 //    if(ui->graphicsView->frameGeometry().contains(mousePosition))
 //    {
-    mouseCoords.at(0) = ui->graphicsView->cursor().pos().x()- (ui->graphicsView->size().width()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).x();
-    mouseCoords.at(1) = ui->graphicsView->cursor().pos().y()- (ui->graphicsView->size().width()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).y();
+        mouseCoords.at(0) = ui->graphicsView->cursor().pos().x() - (ui->graphicsView->size().width()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).x();
+        mouseCoords.at(1) = ui->graphicsView->cursor().pos().y() - (ui->graphicsView->size().height()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).y() + topBuffer;
 
-    //    }
+        //    output_mouse_coords();
+//    }
 }
 
 void MainWindow::get_key_presses()
@@ -147,7 +147,6 @@ void MainWindow::get_key_presses()
             scene->mouseIsPressed = false;
         }
     }
-
 }
 
 void MainWindow::output_player_coords()
@@ -161,6 +160,11 @@ void MainWindow::output_enemy_coords()
     {
         std::cout << "Enemy" << i << " X:" << shooterWorld.getEnemies().at(i).getX() << " Y:" << shooterWorld.getEnemies().at(i).getY() << " Angle:" << shooterWorld.getEnemies().at(i).getAngle() <<std::endl;
     }
+}
+
+void MainWindow::output_mouse_coords()
+{
+    std::cout << "MouseX:" << mouseCoords.at(0) << " MouseY:" << mouseCoords.at(1) << std::endl;
 }
 
 void MainWindow::update_player_color()
@@ -227,6 +231,7 @@ double MainWindow::generate_random_double(double spreadAmount
 void MainWindow::on_enemyIntelligence_sliderMoved(int position)
 {
 //    shooterWorld.setEnemyIntelligence(ui->enemyIntelligence->sliderPosition());
-    shooterWorld.set_enemy_speed(ui->enemyIntelligence->sliderPosition());
+//    shooterWorld.set_enemy_speed(ui->enemyIntelligence->sliderPosition());
+    enemyAddThreshold = ui->enemyIntelligence->sliderPosition();
 }
 

@@ -35,6 +35,7 @@ public:
 
     void output_player_coords();
     void output_enemy_coords();
+    void output_mouse_coords();
 
     void update_player_color();
 
@@ -43,6 +44,9 @@ public:
 
 protected:
     int enemyAddCounter{0};
+    int enemyAddThreshold{100};
+
+    int topBuffer{-68};
 
     WorldClass shooterWorld{};
 
