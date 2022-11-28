@@ -16,8 +16,22 @@ Laser::Laser(double x, double y, double newAngle)
     set2();
 }
 
+Laser::Laser(double x, double y, double newAngle, int initialLaserLifespan)
+{
+    laserLifespan = initialLaserLifespan;
+
+    angle = newAngle;
+
+    x1 = x;
+    y1 = y;
+
+    set2();
+}
+
 void Laser::update_laser()
 {
+    laserLifespan--;
+
     x1 = x1+(updateMoveAmount*sin(angle*PI/180));
     y1 = y1-(updateMoveAmount*cos(angle*PI/180));
 
@@ -56,12 +70,20 @@ void Laser::set2()
 {
     x2 = x1+(length*sin(angle*PI/180));
     y2 = y1-(length*cos(angle*PI/180));
-
-//    std::cout << std::endl;
 }
 
 std::vector<double> Laser::getLaserCoords()
 {
     std::vector<double> coordsVec{x1, y1, x2, y2};
     return coordsVec;
+}
+
+int Laser::getLaserLifespan() const
+{
+    return laserLifespan;
+}
+
+void Laser::setLaserLifespan(int newLaserLifespan)
+{
+    laserLifespan = newLaserLifespan;
 }

@@ -82,7 +82,11 @@ void MainWindow::draw_enemies()
 
 void MainWindow::add_player()
 {
-    ellipse = scene->addEllipse(shooterWorld.getPlayer().getX()-(playerEllipseSize/2), shooterWorld.getPlayer().getY()-(playerEllipseSize/2), playerEllipseSize, playerEllipseSize,QPen(Qt::black),QBrush(Qt::black));
+    ui->playerHealth->display(shooterWorld.getPlayerHealth());
+
+    update_player_color();
+
+    ellipse = scene->addEllipse(shooterWorld.getPlayer().getX()-(playerEllipseSize/2), shooterWorld.getPlayer().getY()-(playerEllipseSize/2), playerEllipseSize, playerEllipseSize,QPen(playerColor),QBrush(playerColor));
     line = scene->addLine(shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayerGun().getLaserCoords().at(2), shooterWorld.getPlayerGun().getLaserCoords().at(3), QPen(Qt::red));
 }
 
@@ -104,16 +108,43 @@ void MainWindow::get_key_presses()
 
     if(mouseIsPressed)
     {
-        if(ui->gunSelector->currentIndex() == 0)
+        if(ui->gunSelector->currentIndex() == 0) //SNIPER
         {
-            Laser newLaser{shooterWorld.getPlayer().getX(), shooterWorld.getPlayer().getY(), shooterWorld.getPlayer().getAngle()};
+            Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle(), 1000};
             shooterWorld.lasers.push_back(newLaser);
             scene->mouseIsPressed = false;
         }
-        else if(ui->gunSelector->currentIndex() == 1)
+        else if(ui->gunSelector->currentIndex() == 1) //SHOTGUN
         {
-            Laser newLaser{shooterWorld.getPlayer().getX(), shooterWorld.getPlayer().getY(), shooterWorld.getPlayer().getAngle()+ generate_random_double()};
+            for(int i = 0; i < 15; i++)
+            {
+                Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(25), 10};
+                shooterWorld.lasers.push_back(newLaser);
+            }
+            scene->mouseIsPressed = false;
+        }
+        else if(ui->gunSelector->currentIndex() == 2) //BURST
+        {
+            for(int i = 0; i < 5; i++)
+            {
+                Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(5), 20};
+                shooterWorld.lasers.push_back(newLaser);
+            }
+            scene->mouseIsPressed = false;
+        }
+        else if(ui->gunSelector->currentIndex() == 3) //MINIGUN
+        {
+            Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(25), 45};
             shooterWorld.lasers.push_back(newLaser);
+        }
+        else if(ui->gunSelector->currentIndex() == 4) //RPG
+        {
+            for(int i = 0; i < 50; i++)
+            {
+                Laser newLaser{mouseCoords.at(0), mouseCoords.at(1), generate_random_double(180), 10};
+                shooterWorld.lasers.push_back(newLaser);
+            }
+            scene->mouseIsPressed = false;
         }
     }
 
@@ -130,6 +161,14 @@ void MainWindow::output_enemy_coords()
     {
         std::cout << "Enemy" << i << " X:" << shooterWorld.getEnemies().at(i).getX() << " Y:" << shooterWorld.getEnemies().at(i).getY() << " Angle:" << shooterWorld.getEnemies().at(i).getAngle() <<std::endl;
     }
+}
+
+void MainWindow::update_player_color()
+{
+    double RColorValue{0};
+    RColorValue = (((100-shooterWorld.getPlayerHealth()))*255)/100;
+
+    playerColor = QColor(RColorValue, 0, 0,255);
 }
 
 void MainWindow::update_world()
@@ -177,7 +216,14 @@ double MainWindow::generate_random_double()
     std::uniform_real_distribution<> dis(minRandomNumber, maxRandomNumber);
     return dis(gen);
 }
-
+double MainWindow::generate_random_double(double spreadAmount
+)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(-spreadAmount, spreadAmount);
+    return dis(gen);
+}
 void MainWindow::on_enemyIntelligence_sliderMoved(int position)
 {
 //    shooterWorld.setEnemyIntelligence(ui->enemyIntelligence->sliderPosition());

@@ -36,6 +36,8 @@ public:
     void output_player_coords();
     void output_enemy_coords();
 
+    void update_player_color();
+
 //    double generate_random_double();
 
 
@@ -61,9 +63,12 @@ protected:
 
     double generate_random_double();
 
+    double generate_random_double(double spreadAmount);
+
+
     int timerPauseValue{40};
 
-//    QColor worldColor = QColor(240, 214, 180, 255);
+    QColor playerColor = QColor(0, 0, 0, 255);
 
     QSize originalWindowSize{800,600};
 

@@ -10,6 +10,7 @@ class Laser
 public:
     Laser();
     Laser(double x, double y, double angle);
+    Laser(double x, double y, double angle, int initialLaserLifespan);
 
     void update_laser();
     void update_laser(int windowMaxX, int windowMaxY, int windowMinX, int windowMinY);
@@ -23,7 +24,12 @@ public:
 
     std::vector<double> getLaserCoords();
 
+    int getLaserLifespan() const;
+    void setLaserLifespan(int newLaserLifespan);
+
 protected:
+    int laserLifespan{0};
+
     double length{10};
     double angle{0};
     double updateMoveAmount{10};

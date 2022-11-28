@@ -46,7 +46,22 @@
             </item>
             <item>
              <property name="text">
+              <string>Shotgun</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Burst</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>Minigun</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>RPG</string>
              </property>
             </item>
            </widget>
@@ -57,6 +72,16 @@
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
            <widget class="QLCDNumber" name="numEnemiesDefeated">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="playerHealth">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -78,6 +103,9 @@
             </property>
             <property name="maximum">
              <number>20</number>
+            </property>
+            <property name="value">
+             <number>4</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>

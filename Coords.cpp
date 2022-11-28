@@ -8,8 +8,6 @@ Coords::Coords()
 
 void Coords::adjustAngle(const std::vector<double>& coordsToFace)
 {
-//    std::cout << "playerAngle1:" << angle << std::endl;
-
     double x2{coordsToFace.at(0)};
     double y2{-coordsToFace.at(1)};
 
@@ -27,9 +25,6 @@ void Coords::adjustAngle(const std::vector<double>& coordsToFace)
     faceAngle = 360-faceAngle;
 
     angle = faceAngle;
-
-//    std::cout << "playerAngle2:" << angle << std::endl;
-
 }
 
 void Coords::updateCoord(std::vector<double> newCoords, double newAngle)

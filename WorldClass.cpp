@@ -1,10 +1,6 @@
 #include "WorldClass.hpp"
 #include <random>
 
-WorldClass::WorldClass()
-{
-}
-
 void WorldClass::update_world(const std::vector<double>& mouseCoords, const std::vector<bool>& keyPresses, std::vector<int>& windowCoords)
 {
     player.adjustAngle(mouseCoords);
@@ -17,6 +13,8 @@ void WorldClass::update_world(const std::vector<double>& mouseCoords, const std:
     update_lasers(windowCoords.at(0), windowCoords.at(1), windowCoords.at(2), windowCoords.at(3));
 
     check_lasers_and_zombies();
+    check_lasers_and_player();
+    check_zombies_and_player();
 
     update_enemies();
 }
@@ -33,7 +31,7 @@ void WorldClass::update_lasers(int windowMaxX, int windowMaxY, int windowMinX, i
 {
     for(int i = 0; i < lasers.size(); i++)
     {
-        if(laser_location_is_valid(lasers.at(i).getLaserCoords().at(0), lasers.at(i).getLaserCoords().at(1), lasers.at(i).getLaserCoords().at(2), lasers.at(i).getLaserCoords().at(3), windowMaxX, windowMaxY, windowMinX, windowMinY))
+        if(lasers.at(i).getLaserLifespan() > 0 && laser_location_is_valid(lasers.at(i).getLaserCoords().at(0), lasers.at(i).getLaserCoords().at(1), lasers.at(i).getLaserCoords().at(2), lasers.at(i).getLaserCoords().at(3), windowMaxX, windowMaxY, windowMinX, windowMinY))
         {
             lasers.at(i).update_laser();
         }
@@ -89,6 +87,31 @@ void WorldClass::check_lasers_and_zombies()
                 lasers.erase(lasers.begin()+j);
                 break;
             }
+        }
+    }
+}
+
+void WorldClass::check_lasers_and_player()
+{
+    for(int j = 0; j < lasers.size(); j++)
+    {
+        if(playerHealth>0 && maxKillDistance > get_distance_between_two_points(player.getX(), player.getY(), lasers.at(j).getLaserCoords().at(0), lasers.at(j).getLaserCoords().at(1)))
+        {
+            numEnemiesDefeated++;
+            playerHealth--;
+            lasers.erase(lasers.begin()+j);
+            break;
+        }
+    }
+}
+
+void WorldClass::check_zombies_and_player()
+{
+    for(int i = 0; i < enemies.size(); i++)
+    {
+        if(playerHealth>0 && maxKillDistanceBetweenPlayersAndZombies > get_distance_between_two_points(enemies.at(i).getX(), enemies.at(i).getY(), player.getX(), player.getY()))
+        {
+            playerHealth--;
         }
     }
 }
@@ -190,6 +213,16 @@ int WorldClass::getNumEnemiesDefeated() const
 void WorldClass::setNumEnemiesDefeated(int newNumEnemiesDefeated)
 {
     numEnemiesDefeated = newNumEnemiesDefeated;
+}
+
+void WorldClass::setPlayerHealth(int newPlayerHealth)
+{
+    playerHealth = newPlayerHealth;
+}
+
+int WorldClass::getPlayerHealth() const
+{
+    return playerHealth;
 }
 
 double WorldClass::get_distance_between_two_points(const double& firstX, const double& firstY, const double& secondX, const double& secondY)

@@ -9,7 +9,7 @@
 class WorldClass
 {
 public:
-    WorldClass();
+    WorldClass(){};
 
     void update_world(const std::vector<double>& mouseCoords, const std::vector<bool>& keyPresses, std::vector<int>& windowCoords);
     void update_lasers();
@@ -18,6 +18,8 @@ public:
     void update_enemies();
 
     void check_lasers_and_zombies();
+    void check_lasers_and_player();
+    void check_zombies_and_player();
 
     void add_random_enemy();
 
@@ -47,14 +49,21 @@ public:
     int getNumEnemiesDefeated() const;
     void setNumEnemiesDefeated(int newNumEnemiesDefeated);
 
+    void setPlayerHealth(int newPlayerHealth);
+
+    int getPlayerHealth() const;
+
 protected:
+    int playerHealth{100};
+
     int numEnemiesDefeated{0};
     int enemyIntelligence{0};
 
     double maxRandomDistance{400};
     double minRandomDistance{-maxRandomDistance};
 
-    double maxKillDistance{25};
+    double maxKillDistance{15};
+    double maxKillDistanceBetweenPlayersAndZombies{10};
 
     double deltaAmount{5};
     Coords player{};
