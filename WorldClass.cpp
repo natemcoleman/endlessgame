@@ -22,6 +22,7 @@ void WorldClass::update_world(const std::vector<double>& mouseCoords, const std:
     update_enemies();
 
     add_health();
+
 }
 
 void WorldClass::update_lasers()
@@ -148,7 +149,7 @@ void WorldClass::add_random_enemy()
 
 void WorldClass::add_health()
 {
-    if(updateWorldCounter > 300)
+    if(updateWorldCounter > 300 && playerHealth < 20)
     {
         Coords newHealth{generate_random_double(), generate_random_double(), generate_random_double(100)};
         health.push_back(newHealth);
