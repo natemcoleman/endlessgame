@@ -20,8 +20,11 @@ public:
     void check_lasers_and_zombies();
     void check_lasers_and_player();
     void check_zombies_and_player();
+    void check_health_and_player();
 
     void add_random_enemy();
+
+    void add_health();
 
     double get_distance_between_two_points(const double& firstX, const double& firstY, const double& secondX, const double& secondY);
 
@@ -39,9 +42,12 @@ public:
     std::vector<Laser> lasers{};
 
     double generate_random_double();
+    double generate_random_double(double inputRange);
     double generate_random_angle();
+    int generate_random_int(int inputRange);
 
-    void set_enemy_speed(int newSpeed);
+
+//    void set_enemy_speed(int newSpeed);
 
     int getEnemyIntelligence() const;
     void setEnemyIntelligence(int newEnemyIntelligence);
@@ -53,8 +59,16 @@ public:
 
     int getPlayerHealth() const;
 
+    double getRepeatAmount() const;
+    void setRepeatAmount(double newRepeatAmount);
+
+    std::vector<Coords> &getHealth();
+    void setHealth(std::vector<Coords>& newHealth);
+
 protected:
     int playerHealth{100};
+
+    int updateWorldCounter{0};
 
     int numEnemiesDefeated{0};
     int enemyIntelligence{0};
@@ -65,10 +79,15 @@ protected:
     double maxKillDistance{15};
     double maxKillDistanceBetweenPlayersAndZombies{10};
 
-    double deltaAmount{5};
+    double deltaAmountPlayer{5};
+    double deltaAmountEnemy{4};
+    double repeatAmount{5};
+
+
     Coords player{};
     std::vector<Coords> enemies{};
     Laser playerGun{player.getX(), player.getY(), player.getAngle()};
+    std::vector<Coords> health{};
 };
 
 #endif // WORLDCLASS_HPP
