@@ -87,6 +87,11 @@ void MainWindow::draw_health()
     }
 }
 
+void MainWindow::draw_scope()
+{
+    line = scene->addLine(shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), mouseCoords.at(0), mouseCoords.at(1), QPen(Qt::blue));
+}
+
 void MainWindow::draw_player()
 {
     ui->playerHealth->display(shooterWorld.getPlayerHealth());
@@ -269,6 +274,10 @@ void MainWindow::update_world() //only redraw every N updates to speed things up
     draw_enemies();
 
     draw_health();
+    if(scopeOn && ui->gunSelector->currentIndex() == 0)
+    {
+        draw_scope();
+    }
 
 //    output_player_coords();
 
@@ -348,5 +357,11 @@ void MainWindow::on_enemyIntelligence_sliderMoved(int position)
 //    shooterWorld.setEnemyIntelligence(ui->enemyIntelligence->sliderPosition());
 //    shooterWorld.set_enemy_speed(ui->enemyIntelligence->sliderPosition());
     enemyAddThreshold = ui->enemyIntelligence->sliderPosition();
+}
+
+
+void MainWindow::on_scopeOn_stateChanged(int arg1)
+{
+    scopeOn = arg1;
 }
 

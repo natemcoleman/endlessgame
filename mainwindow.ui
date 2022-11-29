@@ -38,6 +38,19 @@
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="scopeOn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Scope</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QComboBox" name="gunSelector">
             <item>
              <property name="text">
@@ -129,7 +142,7 @@
      <x>0</x>
      <y>0</y>
      <width>693</width>
-     <height>17</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

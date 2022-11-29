@@ -29,6 +29,7 @@ public:
     void draw_enemies();
     void draw_player();
     void draw_health();
+    void draw_scope();
 
     void get_mouse_location();
     void get_key_presses();
@@ -49,6 +50,8 @@ public:
 
 
 protected:
+    bool scopeOn{false};
+
     int numWorldUpdatesCounter{0};
 
     const int timesToRunBeforeUpdatingGraphics{2};
@@ -56,7 +59,8 @@ protected:
     int enemyAddCounter{0};
     int enemyAddThreshold{100};
 
-    int topBuffer{-68};
+    int topBuffer{-100};
+//    int topBuffer{-68};
 
     WorldClass shooterWorld{};
 
@@ -101,6 +105,7 @@ private slots:
 
     void on_updateWorldButton_released();
     void on_enemyIntelligence_sliderMoved(int position);
+    void on_scopeOn_stateChanged(int arg1);
 };
 
 

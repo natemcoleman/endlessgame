@@ -14,15 +14,14 @@ void WorldClass::update_world(const std::vector<double>& mouseCoords, const std:
     update_lasers();
     update_lasers(windowCoords.at(0), windowCoords.at(1), windowCoords.at(2), windowCoords.at(3));
 
-    check_lasers_and_zombies();
-    check_lasers_and_player();
-    check_zombies_and_player();
-    check_health_and_player();
-
     update_enemies();
 
     add_health();
 
+    check_lasers_and_zombies();
+    check_lasers_and_player();
+    check_zombies_and_player();
+    check_health_and_player();
 }
 
 void WorldClass::update_lasers()
@@ -209,8 +208,8 @@ double WorldClass::generate_random_double()
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-//    std::uniform_real_distribution<> dis(minRandomDistance, maxRandomDistance);
-    std::uniform_real_distribution<> dis(0, maxRandomDistance);
+    std::uniform_real_distribution<> dis(minRandomDistance, maxRandomDistance);
+//    std::uniform_real_distribution<> dis(0, maxRandomDistance);
 
     return dis(gen);
 }
