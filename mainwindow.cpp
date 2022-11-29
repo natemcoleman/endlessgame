@@ -79,6 +79,14 @@ void MainWindow::draw_enemies()
     }
 }
 
+void MainWindow::draw_health()
+{
+    for(int i = 0; i < shooterWorld.getHealth().size(); i++)
+    {
+        ellipse = scene->addEllipse(shooterWorld.getHealth().at(i).getX()-(playerEllipseSize/2), shooterWorld.getHealth().at(i).getY()-(playerEllipseSize/2), playerEllipseSize, playerEllipseSize,QPen(Qt::blue),QBrush(Qt::blue));
+    }
+}
+
 void MainWindow::draw_player()
 {
     ui->playerHealth->display(shooterWorld.getPlayerHealth());
@@ -97,8 +105,8 @@ void MainWindow::get_mouse_location()
 //    {
         mouseCoords.at(0) = ui->graphicsView->cursor().pos().x() - (ui->graphicsView->size().width()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).x();
         mouseCoords.at(1) = ui->graphicsView->cursor().pos().y() - (ui->graphicsView->size().height()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).y() + topBuffer;
+//        mouseCoords.at(1) = -(ui->graphicsView->cursor().pos().y() - (ui->graphicsView->size().height()/2) + ui->graphicsView->mapFromGlobal((ui->graphicsView->pos())).y() + topBuffer);
 
-        //    output_mouse_coords();
 //    }
 }
 
@@ -213,22 +221,29 @@ void MainWindow::update_player_color()
     double RColorValue{0};
     RColorValue = (((100-shooterWorld.getPlayerHealth()))*255)/100;
 
+    if(RColorValue > 255)
+    {
+        RColorValue = 255;
+    }
+    if(RColorValue < 0)
+    {
+        RColorValue = 0;
+    }
+
     playerColor = QColor(RColorValue, 0, 0,255);
 }
 
-void MainWindow::update_world()
+void MainWindow::update_world() //only redraw every N updates to speed things up (minigun)
 {
+    shooterWorld.setRepeatAmount(timesToRunBeforeUpdatingGraphics);
+
+    for(int i= 0; i < timesToRunBeforeUpdatingGraphics; i++)
+    {
     enemyAddCounter++;
 
     add_enemies();
 
-    ui->graphicsView->centerOn(0,0);
-
-    scene->setSceneRect(viewRect);
-
     std::vector<int> windowCoords{(ui->graphicsView->size().width()/2), (ui->graphicsView->size().height()/2), -(ui->graphicsView->size().width()/2), -(ui->graphicsView->size().height()/2)};
-
-    scene->clear();
 
     get_mouse_location();
 
@@ -237,6 +252,15 @@ void MainWindow::update_world()
     move_player();
 
     shooterWorld.update_world(mouseCoords, keyPresses, windowCoords);
+    }
+
+    ui->graphicsView->centerOn(0,0);
+
+//    viewRect = QRect{-viewWidth/2 + static_cast<int>(shooterWorld.getPlayer().getX()), -viewHeight/2 + static_cast<int>(shooterWorld.getPlayer().getY()), viewWidth, viewHeight};
+
+    scene->setSceneRect(viewRect);
+
+    scene->clear();
 
     draw_player();
 
@@ -244,7 +268,11 @@ void MainWindow::update_world()
 
     draw_enemies();
 
+    draw_health();
+
 //    output_player_coords();
+
+//    output_mouse_coords();
 
 //    output_enemy_coords();
 }
@@ -253,6 +281,52 @@ void MainWindow::on_updateWorldButton_released()
 {
     shooterWorld.add_random_enemy();
 }
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_W)
+    {
+        scene->keysPressed.at(0) = true;
+//        std::cout << "W pressed" << std::endl;
+    }
+    if(event->key() == Qt::Key_A)
+    {
+        scene->keysPressed.at(1) = true;
+//        std::cout << "Aa pressed" << std::endl;
+    }
+    if(event->key() == Qt::Key_S)
+    {
+        scene->keysPressed.at(2) = true;
+//        std::cout << "S pressed" << std::endl;
+    }
+    if(event->key() == Qt::Key_D)
+    {
+        scene->keysPressed.at(3) = true;
+//        std::cout << "D pressed" << std::endl;
+    }
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_W)
+    {
+        scene->keysPressed.at(0) = false;
+//        std::cout << "W released main" << std::endl;
+    }
+    if(event->key() == Qt::Key_A)
+    {
+        scene->keysPressed.at(1) = false;
+    }
+    if(event->key() == Qt::Key_S)
+    {
+        scene->keysPressed.at(2) = false;
+    }
+    if(event->key() == Qt::Key_D)
+    {
+        scene->keysPressed.at(3) = false;
+    }
+}
+
 
 double MainWindow::generate_random_double()
 {

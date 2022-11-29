@@ -6,6 +6,27 @@ Coords::Coords()
 
 }
 
+void Coords::adjustPlayerAngle(const std::vector<double>& coordsToFace)
+{
+    double x2{coordsToFace.at(0)};
+    double y2{-coordsToFace.at(1)};
+
+    double faceAngle{atan2((y2+y),(x2-x))*(180/PI)};
+
+    if(faceAngle<0)
+    {
+        faceAngle+=360;
+    }
+    faceAngle-=90;
+    if(faceAngle<0)
+    {
+        faceAngle+=360;
+    }
+    faceAngle = 360-faceAngle;
+
+    angle = faceAngle;
+}
+
 void Coords::adjustAngle(const std::vector<double>& coordsToFace)
 {
     double x2{coordsToFace.at(0)};
@@ -34,10 +55,10 @@ void Coords::updateCoord(std::vector<double> newCoords, double newAngle)
     angle = newAngle;
 }
 
-void Coords::moveCoordAlongAngle()
+void Coords::moveCoordAlongAngle(double moveAmount)
 {
-    x = x + (zombieUpdateMoveAmount*sin(angle*PI/180));
-    y = y + (zombieUpdateMoveAmount*cos(angle*PI/180));
+    x = x + (moveAmount*sin(angle*PI/180));
+    y = y + (moveAmount*cos(angle*PI/180));
 }
 
 void Coords::addX(const double& deltaX)
@@ -88,12 +109,12 @@ double Coords::generate_random_double()
     return dis(gen);
 }
 
-double Coords::getZombieUpdateMoveAmount() const
-{
-    return zombieUpdateMoveAmount;
-}
+//double Coords::getZombieUpdateMoveAmount() const
+//{
+//    return zombieUpdateMoveAmount;
+//}
 
-void Coords::setZombieUpdateMoveAmount(double newZombieUpdateMoveAmount)
-{
-    zombieUpdateMoveAmount = newZombieUpdateMoveAmount;
-}
+//void Coords::setZombieUpdateMoveAmount(double newZombieUpdateMoveAmount)
+//{
+//    zombieUpdateMoveAmount = newZombieUpdateMoveAmount;
+//}

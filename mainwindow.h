@@ -19,30 +19,40 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
     void setup_graphics_view();
     void move_player();
+    void update_player_color();
 
     void add_enemies();
 
     void draw_lasers();
-
     void draw_enemies();
+    void draw_player();
+    void draw_health();
 
-    void add_player();
     void get_mouse_location();
     void get_key_presses();
+
+    void sniper_shot();
+    void shotgun_shot();
+    void burst_shot();
+    void minigun_shot();
+    void rpg_shot();
 
     void output_player_coords();
     void output_enemy_coords();
     void output_mouse_coords();
 
-    void update_player_color();
+
 
 //    double generate_random_double();
 
 
 protected:
+    int numWorldUpdatesCounter{0};
+
+    const int timesToRunBeforeUpdatingGraphics{2};
+
     int enemyAddCounter{0};
     int enemyAddThreshold{100};
 
@@ -63,7 +73,8 @@ protected:
     int viewWidth{400};
     QRect viewRect{-viewWidth/2, -viewHeight/2, viewWidth, viewHeight};
 
-
+    void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
 
     double generate_random_double();
 

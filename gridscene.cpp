@@ -57,19 +57,16 @@ void GridScene::keyPressEvent(QKeyEvent *event)
     {
         keysPressed.at(1) = true;
 //        std::cout << "Aa pressed" << std::endl;
-
     }
     if(event->key() == Qt::Key_S)
     {
         keysPressed.at(2) = true;
 //        std::cout << "S pressed" << std::endl;
-
     }
     if(event->key() == Qt::Key_D)
     {
         keysPressed.at(3) = true;
 //        std::cout << "D pressed" << std::endl;
-
     }
 }
 
@@ -78,6 +75,7 @@ void GridScene::keyReleaseEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_W)
     {
         keysPressed.at(0) = false;
+//        std::cout << "W released" << std::endl;
     }
     if(event->key() == Qt::Key_A)
     {
