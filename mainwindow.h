@@ -45,10 +45,6 @@ public:
     void output_mouse_coords();
 
 
-
-//    double generate_random_double();
-
-
 protected:
     bool scopeOn{false};
 
@@ -83,7 +79,6 @@ protected:
     double generate_random_double();
 
     double generate_random_double(double spreadAmount);
-
 
     int timerPauseValue{40};
 

@@ -53,6 +53,9 @@ void MainWindow::move_player()
 
 void MainWindow::add_enemies()
 {
+    enemyAddThreshold = ui->enemyIntelligence->sliderPosition() - sqrt(shooterWorld.getNumEnemiesDefeated());
+    std::cout << "threshold:" << enemyAddThreshold << std::endl;
+
     if(enemyAddCounter > enemyAddThreshold)
     {
         enemyAddCounter = 0;
@@ -155,16 +158,20 @@ void MainWindow::burst_shot()
 void MainWindow::minigun_shot()
 {
     int spreadAngle{50};
-    int laserLifespan{60};
+    int laserLifespan{static_cast<int>(60*(1+floor(shooterWorld.getNumEnemiesDefeated()/100)))};
+    int numShots{5};
 
-    Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(spreadAngle/2), laserLifespan};
-    shooterWorld.lasers.push_back(newLaser);
+    for(int i = 0; i < numShots; i++)
+    {
+        Laser newLaser{shooterWorld.getPlayerGun().getLaserCoords().at(0), shooterWorld.getPlayerGun().getLaserCoords().at(1), shooterWorld.getPlayer().getAngle()+ generate_random_double(spreadAngle/2), laserLifespan};
+        shooterWorld.lasers.push_back(newLaser);
+    }
 }
 
 void MainWindow::rpg_shot()
 {
-    int numShots{50};
-    int laserLifespan{10};
+    int numShots{180};
+    int laserLifespan{15};
 
     for(int i = 0; i < numShots; i++)
     {
@@ -267,6 +274,11 @@ void MainWindow::update_world() //only redraw every N updates to speed things up
 
     scene->clear();
 
+    if(scopeOn && (ui->gunSelector->currentIndex() == 0 || ui->gunSelector->currentIndex() == 4))
+    {
+        draw_scope();
+    }
+
     draw_player();
 
     draw_lasers();
@@ -274,10 +286,6 @@ void MainWindow::update_world() //only redraw every N updates to speed things up
     draw_enemies();
 
     draw_health();
-    if(scopeOn && ui->gunSelector->currentIndex() == 0)
-    {
-        draw_scope();
-    }
 
 //    output_player_coords();
 
@@ -356,7 +364,7 @@ void MainWindow::on_enemyIntelligence_sliderMoved(int position)
 {
 //    shooterWorld.setEnemyIntelligence(ui->enemyIntelligence->sliderPosition());
 //    shooterWorld.set_enemy_speed(ui->enemyIntelligence->sliderPosition());
-    enemyAddThreshold = ui->enemyIntelligence->sliderPosition();
+//    enemyAddThreshold = ui->enemyIntelligence->sliderPosition();
 }
 
 
